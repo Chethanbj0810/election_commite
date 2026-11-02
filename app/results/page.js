@@ -89,14 +89,26 @@ export default function PublicResultsPage() {
     };
   }, [selectedElection, fetchResults]);
 
-  // Aggregate candidate results for the chart
-  const candidateChartData = (resultsData?.results || []).map((r) => ({
-    label: `${r.candidate} (${r.constituency})`,
-    candidate: r.candidate,
-    constituency: r.constituency,
-    party: r.party,
-    votes: Number(r.votes) || 0,
-  }));
+  const [selectedConstituencyTab, setSelectedConstituencyTab] = useState('ALL');
+
+  // Group candidate results by constituency
+  const resultsByConstituency = (resultsData?.results || []).reduce((acc, r) => {
+    if (!acc[r.constituency]) {
+      acc[r.constituency] = [];
+    }
+    acc[r.constituency].push({
+      candidate: r.candidate,
+      party: r.party,
+      votes: Number(r.votes) || 0,
+    });
+    return acc;
+  }, {});
+
+  const constituencyNames = Object.keys(resultsByConstituency);
+  const activeConstituencies =
+    selectedConstituencyTab === 'ALL'
+      ? constituencyNames
+      : constituencyNames.filter((c) => c === selectedConstituencyTab);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -171,52 +183,110 @@ export default function PublicResultsPage() {
               />
             </div>
 
-            {/* Live Chart */}
-            <Card title="Live Vote Distribution by Candidate & Constituency">
-              {candidateChartData.length === 0 ? (
-                <div className="text-center py-10 text-slate-400 italic">
-                  No votes recorded yet for this election.
+            {/* Live Constituency Charts */}
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900">
+                    Constituency-Wise Vote Distributions
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Independent candidate tally graphs separated by electoral constituency
+                  </p>
                 </div>
-              ) : (
-                <div className="w-full h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={candidateChartData}
-                      margin={{ top: 20, right: 30, left: 10, bottom: 40 }}
+
+                {/* Constituency Selector Filter */}
+                {constituencyNames.length > 1 && (
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+                    <button
+                      onClick={() => setSelectedConstituencyTab('ALL')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                        selectedConstituencyTab === 'ALL'
+                          ? 'bg-indigo-600 text-white shadow-xs'
+                          : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                      }`}
                     >
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                      <XAxis
-                        dataKey="label"
-                        angle={-20}
-                        textAnchor="end"
-                        tick={{ fontSize: 11, fill: '#64748b' }}
-                        interval={0}
-                      />
-                      <YAxis
-                        allowDecimals={false}
-                        tick={{ fontSize: 11, fill: '#64748b' }}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#ffffff',
-                          borderRadius: '8px',
-                          border: '1px solid #e2e8f0',
-                          fontSize: '12px',
-                        }}
-                      />
-                      <Bar dataKey="votes" name="Votes" radius={[6, 6, 0, 0]}>
-                        {candidateChartData.map((_entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={CHART_COLORS[index % CHART_COLORS.length]}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                      All Constituencies ({constituencyNames.length})
+                    </button>
+                    {constituencyNames.map((cName) => (
+                      <button
+                        key={cName}
+                        onClick={() => setSelectedConstituencyTab(cName)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                          selectedConstituencyTab === cName
+                            ? 'bg-indigo-600 text-white shadow-xs'
+                            : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                        }`}
+                      >
+                        {cName}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {constituencyNames.length === 0 ? (
+                <Card className="text-center py-10">
+                  <p className="text-slate-400 italic text-sm">
+                    No votes recorded yet for this election.
+                  </p>
+                </Card>
+              ) : (
+                <div className={`grid gap-6 ${activeConstituencies.length > 1 ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+                  {activeConstituencies.map((constName) => {
+                    const cList = resultsByConstituency[constName] || [];
+                    const cTotal = cList.reduce((acc, cand) => acc + cand.votes, 0);
+
+                    return (
+                      <Card
+                        key={constName}
+                        title={`📍 ${constName}`}
+                        subtitle={`Total Ballots Cast: ${cTotal.toLocaleString()} votes`}
+                      >
+                        <div className="w-full h-64">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              data={cList}
+                              margin={{ top: 15, right: 25, left: 0, bottom: 25 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                              <XAxis
+                                dataKey="candidate"
+                                tick={{ fontSize: 12, fill: '#334155', fontWeight: 600 }}
+                              />
+                              <YAxis
+                                allowDecimals={false}
+                                tick={{ fontSize: 11, fill: '#64748b' }}
+                              />
+                              <Tooltip
+                                formatter={(val, _name, item) => {
+                                  const pct = cTotal > 0 ? ((val / cTotal) * 100).toFixed(1) : '0.0';
+                                  return [`${val} votes (${pct}%)`, `Party: ${item.payload.party}`];
+                                }}
+                                contentStyle={{
+                                  backgroundColor: '#ffffff',
+                                  borderRadius: '8px',
+                                  border: '1px solid #e2e8f0',
+                                  fontSize: '12px',
+                                }}
+                              />
+                              <Bar dataKey="votes" name="Votes" radius={[6, 6, 0, 0]}>
+                                {cList.map((_entry, index) => (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={CHART_COLORS[index % CHART_COLORS.length]}
+                                  />
+                                ))}
+                              </Bar>
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </Card>
+                    );
+                  })}
                 </div>
               )}
-            </Card>
+            </div>
 
             {/* Results Table */}
             <Card title="Constituency Live Tally Table" subtitle="Vote percentage is computed relative to the total ballots cast within each constituency">

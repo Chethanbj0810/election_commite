@@ -120,11 +120,19 @@ export default function AdminAnalyticsPage() {
     count,
   }));
 
-  // Candidate results chart data
-  const candidateChartData = (liveResults?.results || []).map((r) => ({
-    label: `${r.candidate} (${r.constituency})`,
-    votes: Number(r.votes) || 0,
-  }));
+  // Candidate results grouped by constituency
+  const resultsByConstituency = (liveResults?.results || []).reduce((acc, r) => {
+    if (!acc[r.constituency]) {
+      acc[r.constituency] = [];
+    }
+    acc[r.constituency].push({
+      candidate: r.candidate,
+      party: r.party,
+      votes: Number(r.votes) || 0,
+    });
+    return acc;
+  }, {});
+  const constituencyNames = Object.keys(resultsByConstituency);
 
   // Booth turnout chart data
   const boothChartData = boothTurnout.map((b) => ({
@@ -184,34 +192,70 @@ export default function AdminAnalyticsPage() {
           <Loading text="Loading analytics visualizations..." />
         ) : (
           <div className="space-y-6">
-            {/* Section A: Votes Per Candidate */}
-            <Card title="A. Candidate Vote Tallies Grouped by Constituency">
-              {candidateChartData.length === 0 ? (
-                <p className="text-slate-400 text-sm italic text-center py-8">
-                  No votes recorded for this election yet.
+            {/* Section A: Separate Graph for Separate Constituency */}
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-800">
+                  A. Candidate Vote Tallies (Separated by Constituency)
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Each electoral constituency features its own dedicated vote distribution graph
                 </p>
+              </div>
+
+              {constituencyNames.length === 0 ? (
+                <Card className="text-center py-8">
+                  <p className="text-slate-400 text-sm italic">
+                    No votes recorded for this election yet.
+                  </p>
+                </Card>
               ) : (
-                <div className="w-full h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={candidateChartData}
-                      margin={{ top: 20, right: 30, left: 10, bottom: 40 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                      <XAxis
-                        dataKey="label"
-                        angle={-20}
-                        textAnchor="end"
-                        tick={{ fontSize: 11, fill: '#64748b' }}
-                      />
-                      <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
-                      <Tooltip />
-                      <Bar dataKey="votes" name="Votes" fill="#4f46e5" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className={`grid gap-4 ${constituencyNames.length > 1 ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+                  {constituencyNames.map((constName) => {
+                    const cList = resultsByConstituency[constName] || [];
+                    const cTotal = cList.reduce((acc, cand) => acc + cand.votes, 0);
+
+                    return (
+                      <Card
+                        key={constName}
+                        title={`📍 ${constName}`}
+                        subtitle={`Total Ballots Cast: ${cTotal.toLocaleString()} votes`}
+                      >
+                        <div className="w-full h-64">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              data={cList}
+                              margin={{ top: 15, right: 25, left: 0, bottom: 20 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                              <XAxis
+                                dataKey="candidate"
+                                tick={{ fontSize: 11, fill: '#334155', fontWeight: 600 }}
+                              />
+                              <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                              <Tooltip
+                                formatter={(val, _name, item) => {
+                                  const pct = cTotal > 0 ? ((val / cTotal) * 100).toFixed(1) : '0.0';
+                                  return [`${val} votes (${pct}%)`, `Party: ${item.payload.party}`];
+                                }}
+                              />
+                              <Bar dataKey="votes" name="Votes" fill="#4f46e5" radius={[6, 6, 0, 0]}>
+                                {cList.map((_entry, index) => (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#8b5cf6'][index % 5]}
+                                  />
+                                ))}
+                              </Bar>
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </Card>
+                    );
+                  })}
                 </div>
               )}
-            </Card>
+            </div>
 
             {/* Section B: Booth Turnout % (Highlight < 50% in red) */}
             <Card
