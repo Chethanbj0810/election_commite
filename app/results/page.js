@@ -219,14 +219,21 @@ export default function PublicResultsPage() {
             </Card>
 
             {/* Results Table */}
-            <Card title="Constituency Live Tally Table">
+            <Card title="Constituency Live Tally Table" subtitle="Vote percentage is computed relative to the total ballots cast within each constituency">
               <DataTable
-                headers={['Constituency', 'Candidate Name', 'Political Party', 'Votes Received', 'Percentage']}
+                headers={['Constituency', 'Candidate Name', 'Political Party', 'Votes Received', 'Constituency Vote Share']}
                 rows={resultsData.results}
                 emptyMessage="No votes recorded yet."
                 renderRow={(row, idx) => {
-                  const total = resultsData.totalVotes > 0 ? resultsData.totalVotes : 1;
-                  const pct = ((Number(row.votes) / total) * 100).toFixed(1);
+                  // Compute total votes for this specific constituency
+                  const constituencyTotal = (resultsData.results || [])
+                    .filter((r) => r.constituency === row.constituency)
+                    .reduce((sum, r) => sum + Number(r.votes || 0), 0);
+
+                  const pct = constituencyTotal > 0
+                    ? ((Number(row.votes) / constituencyTotal) * 100).toFixed(1)
+                    : '0.0';
+
                   return (
                     <tr key={idx} className="hover:bg-slate-50/70 border-b border-slate-100">
                       <td className="px-5 py-3.5 font-bold text-slate-800 text-sm">
@@ -247,7 +254,8 @@ export default function PublicResultsPage() {
                               style={{ width: `${pct}%` }}
                             ></div>
                           </div>
-                          <span>{pct}%</span>
+                          <span className="font-semibold text-slate-700">{pct}%</span>
+                          <span className="text-[11px] text-slate-400">({row.votes}/{constituencyTotal})</span>
                         </div>
                       </td>
                     </tr>
