@@ -9,6 +9,8 @@
     "lint": "eslint",
     "init:mongo": "node --env-file=.env scripts/init-mongo.js",
     "seed:users": "node --env-file=.env scripts/seed-users.js",
+    "seed:constituencies": "node --env-file=.env scripts/seed-constituencies.js",
+    "seed:booths": "node --env-file=.env scripts/seed-booths.js",
     "seed:grievances": "node --env-file=.env scripts/seed-grievances.js",
     "test": "node --test tests/"
   },
