@@ -182,7 +182,7 @@ export default function AdminBoothsPage() {
               <select
                 value={selectedConstituency}
                 onChange={(e) => setSelectedConstituency(e.target.value)}
-                className="px-3 py-1.5 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-1.5 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">All Constituencies</option>
                 {constituencies.map((c) => (
@@ -262,7 +262,7 @@ export default function AdminBoothsPage() {
                   required
                   value={formData.constituencyId}
                   onChange={(e) => setFormData({ ...formData, constituencyId: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   {constituencies.map((c) => (
                     <option key={c.constituency_id} value={c.constituency_id}>
@@ -282,7 +282,7 @@ export default function AdminBoothsPage() {
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   placeholder="e.g. Govt Primary School, Room 4"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -296,7 +296,7 @@ export default function AdminBoothsPage() {
                   min={1}
                   value={formData.capacity}
                   onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 

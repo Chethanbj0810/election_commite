@@ -206,12 +206,12 @@ export default function OfficerConsolePage() {
                 placeholder="Search voter by name..."
                 value={voterSearch}
                 onChange={(e) => setVoterSearch(e.target.value)}
-                className="flex-1 px-3.5 py-2 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <select
                 value={voterConstituency}
                 onChange={(e) => setVoterConstituency(e.target.value)}
-                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">All Constituencies</option>
                 {constituencies.map((c) => (
@@ -269,7 +269,7 @@ export default function OfficerConsolePage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">All Statuses</option>
                 <option value="open">Open</option>
@@ -280,7 +280,7 @@ export default function OfficerConsolePage() {
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat.value} value={cat.value}>
@@ -292,7 +292,7 @@ export default function OfficerConsolePage() {
               <select
                 value={constituencyFilter}
                 onChange={(e) => setConstituencyFilter(e.target.value)}
-                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">All Constituencies</option>
                 {constituencies.map((c) => (
@@ -343,7 +343,7 @@ export default function OfficerConsolePage() {
                           value={g.status}
                           disabled={updatingId === g._id}
                           onChange={(e) => handleStatusChange(g._id, e.target.value)}
-                          className="px-2.5 py-1 text-xs font-medium rounded-md border border-slate-300 bg-white hover:border-slate-400 outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                          className="px-2.5 py-1 text-xs font-semibold text-slate-900 rounded-md border border-slate-300 bg-white hover:border-slate-400 outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
                         >
                           <option value="open">Open</option>
                           <option value="in_progress">In Progress</option>
@@ -373,12 +373,12 @@ export default function OfficerConsolePage() {
                 placeholder="Search complaint concepts (e.g. booth queue delay, machine malfunction)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <select
                 value={searchConstituency}
                 onChange={(e) => setSearchConstituency(e.target.value)}
-                className="px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">All Constituencies</option>
                 {constituencies.map((c) => (

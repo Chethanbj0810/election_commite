@@ -284,7 +284,7 @@ export default function AdminCandidatesPage() {
                 <select
                   value={selectedElection}
                   onChange={(e) => setSelectedElection(e.target.value)}
-                  className="px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="px-3 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   {elections.map((el) => (
                     <option key={el.election_id} value={el.election_id}>
@@ -300,7 +300,7 @@ export default function AdminCandidatesPage() {
                   placeholder="Full-text candidate search (FTS indexed)..."
                   value={candidateSearch}
                   onChange={(e) => setCandidateSearch(e.target.value)}
-                  className="flex-1 px-3.5 py-2 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="flex-1 px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <button
                   onClick={loadCandidates}
@@ -442,7 +442,7 @@ export default function AdminCandidatesPage() {
                   value={candidateForm.name}
                   onChange={(e) => setCandidateForm({ ...candidateForm, name: e.target.value })}
                   placeholder="e.g. Asha Rao"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -454,7 +454,7 @@ export default function AdminCandidatesPage() {
                   required
                   value={candidateForm.partyId}
                   onChange={(e) => setCandidateForm({ ...candidateForm, partyId: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   {parties.map((p) => (
                     <option key={p.party_id} value={p.party_id}>
@@ -474,7 +474,7 @@ export default function AdminCandidatesPage() {
                   onChange={(e) =>
                     setCandidateForm({ ...candidateForm, constituencyId: e.target.value })
                   }
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   {constituencies.map((c) => (
                     <option key={c.constituency_id} value={c.constituency_id}>
@@ -494,7 +494,7 @@ export default function AdminCandidatesPage() {
                   onChange={(e) =>
                     setCandidateForm({ ...candidateForm, electionId: e.target.value })
                   }
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   {elections.map((el) => (
                     <option key={el.election_id} value={el.election_id}>
@@ -543,7 +543,7 @@ export default function AdminCandidatesPage() {
                   value={partyForm.name}
                   onChange={(e) => setPartyForm({ ...partyForm, name: e.target.value })}
                   placeholder="e.g. Party A"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -557,7 +557,7 @@ export default function AdminCandidatesPage() {
                   value={partyForm.symbol}
                   onChange={(e) => setPartyForm({ ...partyForm, symbol: e.target.value })}
                   placeholder="e.g. Lotus / Elephant / Hand"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 

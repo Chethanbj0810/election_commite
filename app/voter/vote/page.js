@@ -160,7 +160,7 @@ export default function CastVotePage() {
                   <select
                     value={selectedBooth}
                     onChange={(e) => setSelectedBooth(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium focus:ring-2 focus:ring-indigo-500 outline-none"
                     required
                   >
                     {booths.map((b) => (

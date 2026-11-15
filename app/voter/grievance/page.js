@@ -113,7 +113,7 @@ export default function VoterGrievancesPage() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium focus:ring-2 focus:ring-indigo-500 outline-none"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c.value} value={c.value}>
@@ -140,7 +140,7 @@ export default function VoterGrievancesPage() {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Describe the issue in detail, including booth location, timing, and nature of the complaint..."
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
               />
             </div>
 

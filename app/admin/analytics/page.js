@@ -174,7 +174,7 @@ export default function AdminAnalyticsPage() {
             <select
               value={selectedElection}
               onChange={(e) => setSelectedElection(e.target.value)}
-              className="px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {elections.map((el) => (
                 <option key={el.election_id} value={el.election_id}>

@@ -139,7 +139,7 @@ export default function PublicResultsPage() {
             <select
               value={selectedElection}
               onChange={(e) => setSelectedElection(e.target.value)}
-              className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm bg-white font-medium shadow-2xs outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3.5 py-2 rounded-lg border border-slate-300 text-sm text-slate-900 bg-white font-medium shadow-2xs outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {elections.map((el) => (
                 <option key={el.election_id} value={el.election_id}>
