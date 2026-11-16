@@ -5,6 +5,23 @@ export async function middleware(request) {
   const token = request.cookies.get('token')?.value;
   const { pathname } = request.nextUrl;
 
+  // Voters cannot access live results during active polling
+  if (pathname.startsWith('/results')) {
+    if (!token) {
+      return NextResponse.next();
+    }
+    try {
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback_secret_for_middleware_build');
+      const verified = await jwtVerify(token, secret);
+      if (verified.payload?.role === 'voter') {
+        return NextResponse.redirect(new URL('/voter', request.url));
+      }
+    } catch {
+      return NextResponse.next();
+    }
+    return NextResponse.next();
+  }
+
   if (!token) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('from', pathname);
@@ -43,6 +60,6 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/officer/:path*', '/voter/:path*'],
+  matcher: ['/admin/:path*', '/officer/:path*', '/voter/:path*', '/results/:path*', '/results'],
 };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Banner from '@/components/Banner';
 import Loading from '@/components/Loading';
@@ -22,6 +23,7 @@ import {
 const CHART_COLORS = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'];
 
 export default function PublicResultsPage() {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [elections, setElections] = useState([]);
   const [selectedElection, setSelectedElection] = useState('');
@@ -39,6 +41,12 @@ export default function PublicResultsPage() {
           api('/api/auth/me').catch(() => null),
           api('/api/elections'),
         ]);
+
+        if (meData?.role === 'voter') {
+          router.replace('/voter');
+          return;
+        }
+
         if (meData) setUser(meData);
         setElections(elList || []);
         if (elList && elList.length > 0) {
@@ -51,7 +59,7 @@ export default function PublicResultsPage() {
       }
     }
     init();
-  }, []);
+  }, [router]);
 
   const fetchResults = useCallback(async (silently = false) => {
     if (!selectedElection) return;
