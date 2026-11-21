@@ -252,5 +252,5 @@ election_commite/
 
 | Team Member | Contributions |
 | :--- | :--- |
-| *(Name)* | |
-| *(Name)* | |
+| *(CHETHAN BJ)* | |
+
